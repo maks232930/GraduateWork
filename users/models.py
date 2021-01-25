@@ -50,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField('Имя', max_length=50, null=True)
     last_name = models.CharField('Фамилия', max_length=50, null=True)
     is_blocked = models.BooleanField(default=False, verbose_name='Заблокировать')
+    is_active = models.BooleanField(default=True, verbose_name='Доступ в админку')
 
     objects = UserManager()  # example Model.objects
 
@@ -62,4 +63,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         "Is the user a member of staff?"
-        return self.is_superuser
+        if self.is_blocked is True:
+            if self.is_superuser is True:
+                return True
+            return False
+        return self.is_superuser or self.is_active
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'

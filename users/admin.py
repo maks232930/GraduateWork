@@ -2,7 +2,6 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
 from users.models import User
@@ -16,7 +15,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'first_name', 'last_name', 'is_superuser', 'is_blocked')
+        fields = ('email', 'username', 'first_name', 'last_name', 'groups', 'is_active', 'is_superuser', 'is_blocked')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -44,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password', 'is_superuser', 'is_blocked')
+        fields = ('email', 'first_name', 'last_name', 'password', 'is_superuser', 'is_active', 'is_blocked')
 
     def clean_password(self):
         return self.initial["password"]
@@ -54,19 +53,21 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'username', 'first_name', 'last_name', 'is_superuser', 'is_blocked')
+    list_display = ('email', 'username', 'first_name', 'last_name', 'is_superuser', 'is_active', 'is_blocked')
     list_filter = ('is_superuser',)
-    list_editable = ('is_blocked', )
+    list_editable = ('is_blocked', 'is_active')
     fieldsets = (
         (None, {'fields': ('email', 'first_name', 'last_name', 'password',)}),
-        ('Permissions', {'fields': ('is_superuser', 'is_blocked')}),
+        ('Permissions', {'fields': ('is_superuser', 'is_active',  'is_blocked')}),
     )
     # add_fieldsets при добавлении
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': (
-                'email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'is_superuser', 'is_blocked'),
+                'email', 'username', 'first_name', 'last_name', 'groups', 'password1', 'password2', 'is_active',
+                'is_superuser',
+                'is_blocked'),
         }),
     )
     search_fields = ('email',)
@@ -76,4 +77,4 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
