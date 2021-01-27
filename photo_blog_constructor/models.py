@@ -47,7 +47,7 @@ class Post(models.Model):
     title = models.CharField(verbose_name='Название', max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Описание', max_length=10000000)
-    photo = models.ImageField(verbose_name='Фото', upload_to='photo/%Y/%m/%d/')
+    photo = models.FileField(verbose_name='Фото', upload_to='photo/%Y/%m/%d/')
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     full_name = models.CharField(verbose_name='ФИ', max_length=255)

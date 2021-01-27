@@ -21,6 +21,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('photo_blog_constructor.urls'))
 ]
 
 if settings.DEBUG:
