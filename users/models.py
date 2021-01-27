@@ -69,6 +69,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return False
         return self.is_superuser or self.is_active
 
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

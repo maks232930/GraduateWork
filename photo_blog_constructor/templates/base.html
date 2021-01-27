@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Finec - Responsive</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.jpg' %}"/>
+    <!-- Favicon -->
+    {#    <link rel="shortcut icon" href="images/favicon.ico">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="home">
+
+<div class="site-header">
+    <div class="site-logo">
+        {% block logo %}{% endblock %}
+    </div>
+
+    <div class="site-menu">
+        <div class="icon"></div>
+        <div class="menu">
+            <ul>
+                {% block menu %}{% endblock %}
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="site-footer">
+        <div class="site-social">
+            <ul>
+                <li><a href=""><i class="pe-so-dribbble pe-lg pe-va"></i></a></li>
+                <li><i class="pe-so-facebook pe-lg pe-va"></i></li>
+                <li><i class="pe-so-twitter pe-lg pe-va"></i></li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="site-main">
+    <ul class="row grid cs-style-2">
+        {% block photo %}{% endblock %}
+    </ul>
+</div>
+
+
+<script src="{% static 'js/jQuery/jquery-2.1.1.js' %}"></script>
+
+
+<script src="{% static 'js/functions.js' %}"></script>
+
+
+<script src="{% static 'CaptionHoverEffects/js/modernizr.custom.js' %}"></script>
+<script src="{% static 'CaptionHoverEffects/js/toucheffects.js' %}"></script>
+
+
+</body>
+</html>
