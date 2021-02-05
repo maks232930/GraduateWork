@@ -90,4 +90,28 @@ class BlackList(models.Model):
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     reader = models.ForeignKey(Reader, on_delete=models.CASCADE)
+
+
+class SocialLink(models.Model):
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+
+    SOCIAL_LINK = [
+        ('vk', 'Vk'),
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('dribbble', 'Dribbble'),
+        ('amazon', 'Amazon'),
+        ('github', 'Github'),
+        ('instagram', 'Instagram'),
+        ('skype', 'Skype'),
+        ('youtube-1', 'Youtube')
+    ]
+    name = models.CharField(verbose_name='Имя соцсети', choices=SOCIAL_LINK, max_length=15)
+    link = models.URLField('Ссылка на соцсеть')
+
+    def __str__(self):
+        return f'{self.name} {self.link}'
+
+    class Meta:
+        verbose_name = "Соцсеть"
+        verbose_name_plural = "Соцсети"

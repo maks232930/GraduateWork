@@ -1,8 +1,9 @@
 ﻿{% extends 'base.html' %}
+{% load static %}
 
 {% block logo %}
     <a href="">
-        <img src=""/>
+        <img src="{% static 'images/site-logo.png' %}"/>
     </a>
 {% endblock %}
 
@@ -16,9 +17,9 @@
     <li class="col-md-2 post">
         <a href="">
             <figure>
-                <img src="images/uploads/01.jpg">
+                <img src="{% static 'images/uploads/01.jpg' %}">
                 <figcaption>
-                    <h3>Music</h3>
+                    <h3>Category</h3>
                     <span>Jacob Cummings</span>
                 </figcaption>
             </figure>

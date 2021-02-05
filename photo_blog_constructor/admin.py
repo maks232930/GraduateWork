@@ -7,10 +7,22 @@ from .models import (
     Comment,
     BlackList,
     Reader,
-    Like
+    Like,
+    SocialLink
 )
 
-admin.site.register(Portfolio)
+
+class SocialLinkAdmin(admin.StackedInline):
+    model = SocialLink
+    extra = 1
+    show_change_link = True
+
+
+class PortfolioAdmin(admin.ModelAdmin):
+    inlines = [SocialLinkAdmin]
+
+
+admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(Category)
 admin.site.register(Post)
 admin.site.register(Comment)
