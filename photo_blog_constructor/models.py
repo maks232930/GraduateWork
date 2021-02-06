@@ -7,6 +7,7 @@ from users.models import User
 class Portfolio(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя', max_length=30)
+    slug = models.SlugField(max_length=30)
     logo = models.ImageField(verbose_name='Логотип', upload_to='logo/')
     logo_ico = models.ImageField(verbose_name='Логотип ico', upload_to='logo/ico/')
 
@@ -14,8 +15,8 @@ class Portfolio(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Фото блог'
-        verbose_name_plural = 'Фото блоги'
+        verbose_name = 'Портфолио'
+        verbose_name_plural = 'Портфолио'
 
 
 class Reader(models.Model):
@@ -86,10 +87,24 @@ class BlackList(models.Model):
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     reader = models.ForeignKey(Reader, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'Читатель {self.reader.user.get_full_name()} заблокирован на {self.portfolio.name}'
+
+    class Meta:
+        verbose_name = 'Черный список'
+        verbose_name_plural = 'Черные списки'
+
 
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     reader = models.ForeignKey(Reader, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'лайк {self.reader.user.get_full_name()} на пост {self.post.title}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
 
 
 class SocialLink(models.Model):
