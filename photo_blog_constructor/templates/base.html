@@ -3,9 +3,9 @@
 <html lang="en">
 <head>
 
-    <title>Finec - Responsive</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.jpg' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% block ico %}{% endblock %}"/>
     <!-- Favicon -->
     {#    <link rel="shortcut icon" href="images/favicon.ico">#}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,9 +30,7 @@
     <div class="site-footer">
         <div class="site-social">
             <ul>
-                <li><a href=""><i class="pe-so-dribbble pe-lg pe-va"></i></a></li>
-                <li><i class="pe-so-facebook pe-lg pe-va"></i></li>
-                <li><i class="pe-so-twitter pe-lg pe-va"></i></li>
+                {% block social_link %}{% endblock %}
             </ul>
         </div>
     </div>

@@ -1,29 +1,40 @@
 ﻿{% extends 'base.html' %}
-{% load static %}
+
+{% block title %}{{ portfolio.name }}{% endblock %}
+
+{% block ico %}{{ portfolio.logo_ico.url }}{% endblock %}
 
 {% block logo %}
     <a href="">
-        <img src="{% static 'images/site-logo.png' %}"/>
+        <img src="{{ portfolio.logo.url }}" alt="{{ portfolio.slug }}"/>
     </a>
 {% endblock %}
 
 {% block menu %}
-    <li><a href="">Portfolio</a></li>
-    <li><a href="">About</a></li>
-    <li><a href="">Contact</a></li>
+    <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
+    <li><a href="{{ portfolio.get_absolute_url }}about">О мне</a></li>
+    <li><a href="{{ portfolio.get_absolute_url }}contact">Контакты</a></li>
+{% endblock %}
+
+{% block social_link %}
+    {% for link in portfolio.sociallink_set.all %}
+        <li><a href="{{ link.link }}"><i class="pe-so-{{ link.name }} pe-lg pe-va"></i></a></li>
+    {% endfor %}
 {% endblock %}
 
 {% block photo %}
-    <li class="col-md-2 post">
-        <a href="">
-            <figure>
-                <img src="{% static 'images/uploads/01.jpg' %}">
-                <figcaption>
-                    <h3>Category</h3>
-                    <span>Jacob Cummings</span>
-                </figcaption>
-            </figure>
-        </a>
-    </li>
+    {% for post in posts %}
+        <li class="col-md-2 post">
+            <a href="{{ post.get_absolute_url }}">
+                <figure>
+                    <img src="{{ post.photo.url }}">
+                    <figcaption>
+                        <h3>{{ post.category.name }}</h3>
+                        <span>{{ post.full_name }}</span>
+                    </figcaption>
+                </figure>
+            </a>
+        </li>
+    {% endfor %}
 {% endblock %}
 

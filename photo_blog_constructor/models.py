@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 from users.models import User
@@ -13,6 +14,9 @@ class Portfolio(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('home', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Портфолио'
@@ -46,27 +50,30 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(verbose_name='Название', max_length=50)
-    slug = models.SlugField(max_length=50, unique=True)
+    url = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Описание', max_length=10000000)
     photo = models.FileField(verbose_name='Фото', upload_to='photo/%Y/%m/%d/')
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     full_name = models.CharField(verbose_name='ФИ', max_length=255)
-    client = models.CharField(verbose_name='Клиент', max_length=40)
-    budget = models.CharField(verbose_name='Бюджет', max_length=10)
+    client = models.CharField(verbose_name='Клиент', max_length=40, blank=True)
+    budget = models.CharField(verbose_name='Бюджет', max_length=10, blank=True)
     date = models.DateField(verbose_name='Дата', default=timezone.now)
     views = models.PositiveIntegerField('Просмотры', default=0)
 
     def __str__(self):
-        return self.client
+        return self.title
 
-    class Meta:
-        verbose_name = 'Пост'
-        verbose_name_plural = 'Посты'
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.portfolio.slug, 'name': self.url})
 
     def save(self, *args, **kwargs):
         self.full_name = self.portfolio.user.get_full_name()
         super(Post, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
 
 
 class Comment(models.Model):
