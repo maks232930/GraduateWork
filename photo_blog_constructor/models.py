@@ -52,10 +52,10 @@ class Post(models.Model):
     title = models.CharField(verbose_name='Название', max_length=50)
     url = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Описание', max_length=10000000)
+    home_image = models.ImageField(verbose_name='Фото на главную', upload_to='photo/home/%Y/%m/%d/')
     photo = models.FileField(verbose_name='Фото', upload_to='photo/%Y/%m/%d/')
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
-    full_name = models.CharField(verbose_name='ФИ', max_length=255)
     client = models.CharField(verbose_name='Клиент', max_length=40, blank=True)
     budget = models.CharField(verbose_name='Бюджет', max_length=10, blank=True)
     date = models.DateField(verbose_name='Дата', default=timezone.now)
@@ -66,10 +66,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'slug': self.portfolio.slug, 'name': self.url})
-
-    def save(self, *args, **kwargs):
-        self.full_name = self.portfolio.user.get_full_name()
-        super(Post, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Пост'
@@ -126,7 +122,8 @@ class SocialLink(models.Model):
         ('github', 'Github'),
         ('instagram', 'Instagram'),
         ('skype', 'Skype'),
-        ('youtube-1', 'Youtube')
+        ('youtube-1', 'Youtube'),
+        ('linkedin', 'Linkedin')
     ]
     name = models.CharField(verbose_name='Имя соцсети', choices=SOCIAL_LINK, max_length=15)
     link = models.URLField('Ссылка на соцсеть')
