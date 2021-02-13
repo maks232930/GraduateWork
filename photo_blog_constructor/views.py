@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import View
 
-from .models import Portfolio, Post
+from .forms import ReaderRegistrationForm
+from .models import Portfolio, Post, Comment
 
 
 class HomeView(View):
@@ -17,6 +18,18 @@ class PostView(View):
 
     def get(self, request, slug, name):
         portfolio = Portfolio.objects.get(slug=slug)
-        post = Post.objects.get(name=name)
-        context = {'posts': post, 'portfolio': portfolio}
+        post = Post.objects.get(url=name)
+        comments = Comment.objects.filter(post=post)
+        context = {'post': post, 'portfolio': portfolio, 'comments': comments}
         return render(request, 'photo_blog_constructor/post_detail.html', context)
+
+    # def post(self, request):
+
+
+class ReaderView(View):
+
+    def get(self, request, slug):
+        form = ReaderRegistrationForm()
+        portfolio = Portfolio.objects.get(slug=slug)
+        context = {'portfolio': portfolio, 'form': form}
+        return render(request, 'photo_blog_constructor/register.html', context)
