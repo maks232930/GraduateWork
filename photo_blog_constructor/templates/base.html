@@ -2,27 +2,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{{ portfolio.name }}{% endblock %}</title>
     <meta charset="utf-8">
-    <link rel="shortcut icon" type="image/png" href="{% block ico %}{% endblock %}"/>
-    <!-- Favicon -->
-    {#    <link rel="shortcut icon" href="images/favicon.ico">#}
+    <link rel="shortcut icon" type="image/png" href="{{ portfolio.logo_ico.url }}"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body class="home">
+<body class="{% block body_class %}{% endblock %}">
 
 <div class="site-header">
     <div class="site-logo">
-        {% block logo %}{% endblock %}
+        <a href="{{ portfolio.get_absolute_url }}">
+            <img src="{{ portfolio.logo.url }}" alt="{{ portfolio.slug }}"/>
+        </a>
     </div>
 
     <div class="site-menu">
         <div class="icon"></div>
         <div class="menu">
             <ul>
-                {% block menu %}{% endblock %}
+                <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
+                <li><a href="{{ portfolio.get_absolute_url }}about/">О мне</a></li>
+                <li><a href="{{ portfolio.get_absolute_url }}contact/">Контакты</a></li>
+                <li><a href="{{ portfolio.get_absolute_url }}login/">Вход</a></li>
+                <li><a href="{{ portfolio.get_absolute_url }}register/">Регистрация</a></li>
             </ul>
         </div>
     </div>
@@ -30,7 +35,9 @@
     <div class="site-footer">
         <div class="site-social">
             <ul>
-                {% block social_link %}{% endblock %}
+                {% for link in portfolio.sociallink_set.all %}
+                    <li><a href="{{ link.link }}"><i class="pe-so-{{ link.name }} pe-lg pe-va"></i></a></li>
+                {% endfor %}
             </ul>
         </div>
     </div>
@@ -38,9 +45,9 @@
 </div>
 
 <div class="site-main">
-    <ul class="row grid cs-style-2">
-        {% block photo %}{% endblock %}
-    </ul>
+    {% block main %}
+
+    {% endblock %}
 </div>
 
 
@@ -48,6 +55,8 @@
 
 
 <script src="{% static 'js/functions.js' %}"></script>
+
+<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 
 
 <script src="{% static 'CaptionHoverEffects/js/modernizr.custom.js' %}"></script>

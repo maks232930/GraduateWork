@@ -1,40 +1,22 @@
 ﻿{% extends 'base.html' %}
 
-{% block title %}{{ portfolio.name }}{% endblock %}
+{% block body_class %}home{% endblock %}
 
-{% block ico %}{{ portfolio.logo_ico.url }}{% endblock %}
-
-{% block logo %}
-    <a href="">
-        <img src="{{ portfolio.logo.url }}" alt="{{ portfolio.slug }}"/>
-    </a>
-{% endblock %}
-
-{% block menu %}
-    <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
-    <li><a href="{{ portfolio.get_absolute_url }}about">О мне</a></li>
-    <li><a href="{{ portfolio.get_absolute_url }}contact">Контакты</a></li>
-{% endblock %}
-
-{% block social_link %}
-    {% for link in portfolio.sociallink_set.all %}
-        <li><a href="{{ link.link }}"><i class="pe-so-{{ link.name }} pe-lg pe-va"></i></a></li>
-    {% endfor %}
-{% endblock %}
-
-{% block photo %}
-    {% for post in posts %}
-        <li class="col-md-2 post">
-            <a href="{{ post.get_absolute_url }}">
-                <figure>
-                    <img src="{{ post.photo.url }}">
-                    <figcaption>
-                        <h3>{{ post.category.name }}</h3>
-                        <span>{{ post.full_name }}</span>
-                    </figcaption>
-                </figure>
-            </a>
-        </li>
-    {% endfor %}
+{% block main %}
+    <ul class="row grid cs-style-2">
+        {% for post in posts %}
+            <li class="col-md-2 post">
+                <a href="{{ post.get_absolute_url }}">
+                    <figure>
+                        <img src="{{ post.home_image.url }}">
+                        <figcaption>
+                            <h3>{{ post.category.name }}</h3>
+                            <span>{{ portfolio.user.get_full_name }}</span>
+                        </figcaption>
+                    </figure>
+                </a>
+            </li>
+            </ul>
+        {% endfor %}
 {% endblock %}
 
