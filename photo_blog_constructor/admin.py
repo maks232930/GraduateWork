@@ -54,7 +54,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'portfolio', 'category', 'client', 'budget', 'date', 'views')
     list_display_links = ('title', 'url', 'portfolio', 'category', 'client', 'budget', 'date', 'views')
     prepopulated_fields = {'url': ('title',)}
-    readonly_fields = ('full_name', 'views')
+    readonly_fields = ('views', )
     list_filter = ('category',)
 
 
