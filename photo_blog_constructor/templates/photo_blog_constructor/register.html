@@ -6,14 +6,18 @@
 
 {% block main %}
     <div class="inner clearfix">
-        <h2>Регистрация</h2>
+        <h2 style="text-align: center; margin-bottom: 15px">Регистрация</h2>
         <form action="" method="post">
             {% csrf_token %}
             {% for f in form %}
-                <p>{{ f }}</p>
+                <p class="desc">{{ f }}</p>
             {% endfor %}
 
-            <a methods="post" class="btn btn-default" href="#" role="button">Зарегистрироваться</a>
+            <button methods="post" class="btn btn-default" href="#" >Зарегистрироваться</button>
         </form>
-    </div>
+        <div class="errorlist mt-3">
+            {% for f in form.non_field_errors %}
+                <li>{{ f }}</li>
+            {% endfor %}
+        </div>
 {% endblock %}

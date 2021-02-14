@@ -7,8 +7,9 @@ from users.models import User
 
 class Portfolio(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='Имя', max_length=30)
-    slug = models.SlugField(max_length=30)
+    name = models.CharField(verbose_name='Имя', max_length=30, unique=True)
+    slug = models.SlugField(max_length=30, unique=True)
+    description = models.TextField(verbose_name='Описание блога')
     logo = models.ImageField(verbose_name='Логотип', upload_to='logo/')
     logo_ico = models.ImageField(verbose_name='Логотип ico', upload_to='logo/ico/')
 
@@ -53,7 +54,6 @@ class Post(models.Model):
     url = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Описание', max_length=10000000)
     home_image = models.ImageField(verbose_name='Фото на главную', upload_to='photo/home/%Y/%m/%d/')
-    photo = models.FileField(verbose_name='Фото', upload_to='photo/%Y/%m/%d/')
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     client = models.CharField(verbose_name='Клиент', max_length=40, blank=True)
@@ -70,6 +70,15 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
+
+
+class Photo(models.Model):
+    post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
+    file = models.FileField('Вложения', upload_to='attachments')
+
+    class Meta:
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фото'
 
 
 class Comment(models.Model):

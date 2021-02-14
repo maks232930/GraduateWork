@@ -1,7 +1,9 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
+from multiupload.fields import MultiFileField
 
 from users.models import User
-from .models import Comment
+from .models import Comment, Post, Photo
 
 
 class CommentForm(forms.ModelForm):
@@ -18,18 +20,19 @@ class CommentForm(forms.ModelForm):
 
 class ReaderRegistrationForm(forms.ModelForm):
     password = forms.CharField(max_length=255, label='Пароль',
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
+                               widget=forms.PasswordInput(attrs={'placeholder': 'Пароль', 'style': 'width:100%'}))
     password2 = forms.CharField(max_length=255, label='Повторите пароль',
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}))
+                                widget=forms.PasswordInput(
+                                    attrs={'placeholder': 'Повторите пароль', 'style': 'width:100%'}))
 
     class Meta:
         model = User
         fields = ('email', 'username', 'first_name', 'last_name')
         widgets = {
-            'email': forms.TextInput(attrs={'placeholder': 'Email'}),
-            'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя'}),
-            'first_name': forms.TextInput(attrs={'placeholder': 'Имя'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'Фамилия'}),
+            'email': forms.TextInput(attrs={'placeholder': 'Email', 'style': 'width:100%'}),
+            'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя', 'style': 'width:100%'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'Имя', 'style': 'width:100%'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Фамилия', 'style': 'width:100%'}),
         }
 
     def clean_password2(self):
@@ -37,3 +40,20 @@ class ReaderRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Пароли не совпадают!!')
         return cd['password2']
+
+
+class PostForm(forms.ModelForm):
+    description = forms.CharField(widget=CKEditorUploadingWidget())
+    files = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5)
+
+    class Meta:
+        model = Post
+        fields = (
+            'title', 'url', 'home_image', 'portfolio', 'category', 'client', 'budget', 'date')
+
+    def save(self, commit=True):
+        instance = super(PostForm, self).save(commit)
+        for each in self.cleaned_data['files']:
+            Photo.objects.create(file=each, post=instance)
+
+        return instance

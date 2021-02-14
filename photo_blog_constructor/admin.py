@@ -7,6 +7,7 @@ from .models import (
     Portfolio,
     Category,
     Post,
+    Photo,
     Comment,
     BlackList,
     Reader,
@@ -54,8 +55,13 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'portfolio', 'category', 'client', 'budget', 'date', 'views')
     list_display_links = ('title', 'url', 'portfolio', 'category', 'client', 'budget', 'date', 'views')
     prepopulated_fields = {'url': ('title',)}
-    readonly_fields = ('views', )
+    readonly_fields = ('views',)
     list_filter = ('category',)
+
+
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ('post',)
+    list_filter = ('post',)
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -83,6 +89,7 @@ class LikeAdmin(admin.ModelAdmin):
 admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(BlackList, BlackListAdmin)
 admin.site.register(Reader, ReaderAdmin)
