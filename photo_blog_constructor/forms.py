@@ -1,6 +1,6 @@
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
-from multiupload.fields import MultiFileField
+from multiupload.fields import MultiImageField
 
 from users.models import User
 from .models import Comment, Post, Photo
@@ -42,9 +42,9 @@ class ReaderRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
-class PostForm(forms.ModelForm):
+class PostCreateForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorUploadingWidget())
-    files = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5)
+    files = MultiImageField(min_num=1, max_num=3)
 
     class Meta:
         model = Post
@@ -52,7 +52,7 @@ class PostForm(forms.ModelForm):
             'title', 'url', 'home_image', 'portfolio', 'category', 'client', 'budget', 'date')
 
     def save(self, commit=True):
-        instance = super(PostForm, self).save(commit)
+        instance = super(PostCreateForm, self).save(commit)
         for each in self.cleaned_data['files']:
             Photo.objects.create(file=each, post=instance)
 

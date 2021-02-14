@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .forms import ReaderRegistrationForm, PostForm
+from .forms import ReaderRegistrationForm, PostCreateForm
 from .models import Portfolio, Post, Comment, Reader
 
 
@@ -57,10 +57,17 @@ class ProfileView(View):
         return render(request, 'photo_blog_constructor/profile.html', {'portfolio': portfolio})
 
 
-class PostView(View):
+class PostCreateView(View):
 
     def get(self, request, slug):
         portfolio = Portfolio.objects.get(slug=slug)
-        form = PostForm()
+        form = PostCreateForm()
         context = {'portfolio': portfolio, 'form': form}
         return render(request, 'photo_blog_constructor/add-post.html', context)
+
+    def post(self, request, slug):
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            print('valid')
+            return redirect('home')
+        return redirect('add_post')

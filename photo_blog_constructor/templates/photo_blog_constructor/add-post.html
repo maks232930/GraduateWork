@@ -7,11 +7,12 @@
 {% block main %}
     <div class="inner clearfix">
         <h2 style="text-align: center; margin-bottom: 15px">Добавление поста</h2>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {#            {% for f in form %}#}
-            {#                <p class="desc">{{ f }}</p>#}
-            {#            {% endfor %}#}
+{#            {% for field in form %}#}
+{#                <p class="desc">{{ field }}</p>#}
+{#            {% endfor %}#}
+            {{ form.media }}
             {{ form.as_p }}
 
             <button methods="post" class="btn btn-default" href="#">Добавить</button>
