@@ -1,9 +1,10 @@
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
+from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
 
 from users.models import User
-from .models import Comment, Post, Photo
+from .models import Comment, Post
 
 
 class CommentForm(forms.ModelForm):
@@ -14,7 +15,8 @@ class CommentForm(forms.ModelForm):
 
         widgets = {
             'reader': forms.HiddenInput(),
-            'post': forms.HiddenInput()
+            'post': forms.HiddenInput(),
+            'content': forms.Textarea(attrs={'placeholder': 'Комментарий', 'style': 'width:100%'})
         }
 
 
@@ -43,17 +45,24 @@ class ReaderRegistrationForm(forms.ModelForm):
 
 
 class PostCreateForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorUploadingWidget())
-    files = MultiImageField(min_num=1, max_num=3)
+    description = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание')
+    files = MultiImageField(min_num=0, max_num=3, label='Фото 600х300', required=False)
 
     class Meta:
         model = Post
         fields = (
-            'title', 'url', 'home_image', 'portfolio', 'category', 'client', 'budget', 'date')
+            'title', 'url', 'home_image', 'portfolio', 'category', 'date', 'views')
+        widgets = {
+            'portfolio': forms.HiddenInput(),
+            'title': forms.TextInput(attrs={'placeholder': 'Заголовок', 'style': 'width:100%'}),
+            'url': forms.HiddenInput(),
+            'category': forms.Select(),
+            'date': forms.DateInput(attrs={'placeholder': 'Фото на главную(300x300)', 'style': 'width:30%'}),
+            'views': forms.HiddenInput()
+
+        }
 
     def save(self, commit=True):
         instance = super(PostCreateForm, self).save(commit)
-        for each in self.cleaned_data['files']:
-            Photo.objects.create(file=each, post=instance)
-
+        instance.url = slugify(self.cleaned_data['title'])
         return instance

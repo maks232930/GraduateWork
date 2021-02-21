@@ -30,7 +30,7 @@
 {#                <li><a href="{% url 'register' slug=portfolio.slug %}">Регистрация</a></li>#}
 
                 {% if request.user == portfolio.user %}
-                    <li><a href="{{ portfolio.get_absolute_url }}login/">Добавить пост</a></li>
+                    <li><a href="{% url 'add_post' slug=portfolio.slug %}">Добавить пост</a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Статистика постов</a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Черный список</a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Информация о портфолио</a></li>

@@ -51,13 +51,11 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(verbose_name='Название', max_length=50)
-    url = models.SlugField(max_length=50, unique=True)
+    url = models.SlugField(max_length=50, unique=True, blank=True)
     description = models.TextField(verbose_name='Описание', max_length=10000000)
-    home_image = models.ImageField(verbose_name='Фото на главную', upload_to='photo/home/%Y/%m/%d/')
-    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    home_image = models.ImageField(verbose_name='Фото на главную', upload_to='photo/home/%Y/%m/%d/', blank=True)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
-    client = models.CharField(verbose_name='Клиент', max_length=40, blank=True)
-    budget = models.CharField(verbose_name='Бюджет', max_length=10, blank=True)
     date = models.DateField(verbose_name='Дата', default=timezone.now)
     views = models.PositiveIntegerField('Просмотры', default=0)
 
@@ -74,7 +72,7 @@ class Post(models.Model):
 
 class Photo(models.Model):
     post = models.ForeignKey(Post, verbose_name='Пост', on_delete=models.CASCADE)
-    file = models.FileField('Вложения', upload_to='attachments')
+    file = models.FileField('Вложения', upload_to='attachments', blank=True)
 
     class Meta:
         verbose_name = 'Фото'
@@ -82,8 +80,8 @@ class Photo(models.Model):
 
 
 class Comment(models.Model):
-    reader = models.ForeignKey(Reader, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    reader = models.ForeignKey(Reader, on_delete=models.CASCADE, blank=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True)
     content = models.TextField(max_length=1000)
     date = models.DateTimeField(verbose_name='Дата', auto_now_add=True)
 

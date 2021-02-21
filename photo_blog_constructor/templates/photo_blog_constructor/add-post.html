@@ -5,13 +5,10 @@
 {% block body_class %}about{% endblock %}
 
 {% block main %}
-    <div class="inner clearfix">
+    <div class="inner clearfix" style="max-width: 833px">
         <h2 style="text-align: center; margin-bottom: 15px">Добавление поста</h2>
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-{#            {% for field in form %}#}
-{#                <p class="desc">{{ field }}</p>#}
-{#            {% endfor %}#}
             {{ form.media }}
             {{ form.as_p }}
 
