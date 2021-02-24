@@ -31,8 +31,8 @@
 
                 {% if request.user == portfolio.user %}
                     <li><a href="{% url 'add_post' slug=portfolio.slug %}">Добавить пост</a></li>
-                    <li><a href="{{ portfolio.get_absolute_url }}login/">Статистика постов</a></li>
-                    <li><a href="{{ portfolio.get_absolute_url }}login/">Черный список</a></li>
+                    <li><a href="{% url 'post_statistics' slug=portfolio.slug %}">Упровление постами</a></li>
+                    <li><a href="{% url 'readers' slug=portfolio.slug %}">Читатели</a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Информация о портфолио</a></li>
 
                 {% endif %}

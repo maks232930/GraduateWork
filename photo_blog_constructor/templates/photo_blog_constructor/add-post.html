@@ -7,12 +7,11 @@
 {% block main %}
     <div class="inner clearfix" style="max-width: 833px">
         <h2 style="text-align: center; margin-bottom: 15px">Добавление поста</h2>
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.media }}
-            {{ form.as_p }}
-
-            <button methods="post" class="btn btn-default" href="#">Добавить</button>
-        </form>
+        {% include 'inc/_post_form.html' with button_name='Добавить' %}
+    </div>
+    {#        <div class="errorlist mt-3">#}
+    {#            {% for f in form.non_field_errors %}#}
+    {#                <li>{{ f }}</li>#}
+    {#            {% endfor %}#}
 
 {% endblock %}

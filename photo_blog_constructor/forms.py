@@ -2,6 +2,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
+from pytils import translit
 
 from users.models import User
 from .models import Comment, Post
@@ -44,9 +45,9 @@ class ReaderRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
-class PostCreateForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание')
-    files = MultiImageField(min_num=0, max_num=3, label='Фото 600х300', required=False)
+    files = MultiImageField(min_num=0, max_num=3, label='Фото 600х300', required=True)
 
     class Meta:
         model = Post
@@ -64,5 +65,6 @@ class PostCreateForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(PostCreateForm, self).save(commit)
-        instance.url = slugify(self.cleaned_data['title'])
+        url = translit.translify(self.cleaned_data['title'])
+        instance.url = slugify(url)
         return instance

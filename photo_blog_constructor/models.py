@@ -27,6 +27,7 @@ class Portfolio(models.Model):
 class Reader(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    is_blocked = models.BooleanField('Заблокировать', default=False)
 
     def __str__(self):
         return f'Читатель {self.user.get_full_name()} блога {self.portfolio.name}'
@@ -57,7 +58,7 @@ class Post(models.Model):
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     date = models.DateField(verbose_name='Дата', default=timezone.now)
-    views = models.PositiveIntegerField('Просмотры', default=0)
+    views = models.PositiveIntegerField('Просмотры', default=0, blank=True)
 
     def __str__(self):
         return self.title
