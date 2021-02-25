@@ -16,6 +16,7 @@
                 <th>Дата</th>
                 <th>Лайки</th>
                 <th>Просмотры</th>
+                <th>Комментариев</th>
                 <th>Редактироавть</th>
                 <th>Удалить</th>
             </tr>
@@ -28,11 +29,12 @@
                     <td style="text-align: left">{{ post.date }}</td>
                     <td style="text-align: left">{{ post.like_set.count }}</td>
                     <td style="text-align: left">{{ post.views }}</td>
+                    <td style="text-align: left">{{ post.comment_set.count }}</td>
                     <td style="text-align: left"><a class="btn btn-info" role="button"
-                                                    href="{% url 'post_edit' slug=portfolio.slug name=post.url %}">Редактировать</a>
+                                                    href="{% url 'portfolio:post_edit' slug=portfolio.slug name=post.url %}">Редактировать</a>
                     </td>
                     <td style="text-align: left"><a class="btn btn-info" role="button"
-                                                    href="{% url 'delete_post' slug=portfolio.slug name=post.url %}">Удалить</a>
+                                                    href="{% url 'portfolio:delete_post' slug=portfolio.slug name=post.url %}">Удалить</a>
                     </td>
                 </tr>
             {% endfor %}

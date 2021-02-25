@@ -8,12 +8,15 @@ from .views import (
     PostCreateView,
     PostStatisticsView,
     PostChangeView,
-    PostDeleteView
+    PostDeleteView,
+    about_view
 )
 
+app_name = 'portfolio'
 
 urlpatterns = [
     path('<str:slug>/', HomeView.as_view(), name='home'),
+    path('<str:slug>/about/', about_view, name='about'),
     path('<str:slug>/add-post/', PostCreateView.as_view(), name='add_post'),
     path('<str:slug>/post-management/', PostStatisticsView.as_view(), name='post_statistics'),
     path('<str:slug>/profile/', ProfileView.as_view(), name='profile'),

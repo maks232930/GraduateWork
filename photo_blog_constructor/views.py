@@ -210,3 +210,9 @@ def reader_view(request, slug):
             return redirect('readers', slug=portfolio.slug)
     context = {'portfolio': portfolio, 'readers': readers}
     return render(request, 'photo_blog_constructor/readers.html', context)
+
+
+def about_view(request, slug):
+    portfolio = Portfolio.objects.get(slug=slug)
+    context = {'portfolio': portfolio}
+    return render(request, 'photo_blog_constructor/about.html', context)

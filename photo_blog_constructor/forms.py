@@ -1,11 +1,12 @@
+import random
+
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
 from pytils import translit
 
-from users.models import User
-from .models import Comment, Post
+from .models import Comment, Post, Category
 
 
 class CommentForm(forms.ModelForm):
@@ -21,33 +22,10 @@ class CommentForm(forms.ModelForm):
         }
 
 
-class ReaderRegistrationForm(forms.ModelForm):
-    password = forms.CharField(max_length=255, label='Пароль',
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Пароль', 'style': 'width:100%'}))
-    password2 = forms.CharField(max_length=255, label='Повторите пароль',
-                                widget=forms.PasswordInput(
-                                    attrs={'placeholder': 'Повторите пароль', 'style': 'width:100%'}))
-
-    class Meta:
-        model = User
-        fields = ('email', 'username', 'first_name', 'last_name')
-        widgets = {
-            'email': forms.TextInput(attrs={'placeholder': 'Email', 'style': 'width:100%'}),
-            'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя', 'style': 'width:100%'}),
-            'first_name': forms.TextInput(attrs={'placeholder': 'Имя', 'style': 'width:100%'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'Фамилия', 'style': 'width:100%'}),
-        }
-
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Пароли не совпадают!!')
-        return cd['password2']
-
-
 class PostForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание')
     files = MultiImageField(min_num=0, max_num=3, label='Фото 600х300', required=True)
+    # category = forms.ModelChoiceField(queryset=Category.objects.filter(portfolio=))
 
     class Meta:
         model = Post
@@ -64,7 +42,7 @@ class PostForm(forms.ModelForm):
         }
 
     def save(self, commit=True):
-        instance = super(PostCreateForm, self).save(commit)
+        instance = super(PostForm, self).save(commit)
         url = translit.translify(self.cleaned_data['title'])
-        instance.url = slugify(url)
+        instance.url = f'{random.randint(1, 100000)}-{slugify(url)}'
         return instance

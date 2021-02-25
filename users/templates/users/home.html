@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'users_base.html' %}
 
 {% block main %}
     <section class="py-5 text-center container">
@@ -16,12 +16,6 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        {#                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"#}
-                        {#                             xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"#}
-                        {#                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>#}
-                        {#                            <rect width="100%" height="100%" fill="#55595c"/>#}
-                        {#                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>#}
-                        {#                        </svg>#}
                         <img src="../../media/users/home/img.png" class="bd-placeholder-img card-img-top" width="100%"
                              height="225" alt="">
 
@@ -29,8 +23,10 @@
                             <p class="card-text">Шаблон выполнен в стиле минимализм. Больше подходит для фотографов</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    {#                                    <button type="button" class="btn btn-sm btn-outline-secondary"></button>#}
-                                    {#                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>#}
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Посмотреть пример
+                                    </button>
+                                    {% if request.user.is_authenticated %}
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Создать</button>{% endif %}
                                 </div>
                             </div>
                         </div>

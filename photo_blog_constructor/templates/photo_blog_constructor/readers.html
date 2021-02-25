@@ -40,7 +40,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% if readers.count == 0 %}
+            {% if readers.count != 0 %}
                 <button type="submit" class="btn btn-success">Сохранить</button>
             {% else %}
                 <h2 style="text-align: center">У вас не читателей(</h2>

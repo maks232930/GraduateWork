@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}О мне{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block main %}
+    <div class="inner clearfix">
+        <h2 style="text-align: center">Информация о блоге</h2>
+        <div class="panel-body">
+            {{ portfolio.description }}
+        </div>
+    </div>
+
+
+{% endblock %}

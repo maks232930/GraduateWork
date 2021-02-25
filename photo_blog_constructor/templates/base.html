@@ -15,7 +15,7 @@
 <div class="site-header">
     <div class="site-logo">
         <a href="{{ portfolio.get_absolute_url }}">
-            <img src="{{ portfolio.logo.url }}" alt="{{ portfolio.slug }}"/>
+            <img src="{{ portfolio.logo.url }}" alt="{{ portfolio.slug }}" height="50px" width="50px"/>
         </a>
     </div>
 
@@ -24,17 +24,16 @@
         <div class="menu">
             <ul>
                 <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
-                <li><a href="{{ portfolio.get_absolute_url }}about/">О мне</a></li>
+                <li><a href="{% url 'portfolio:about' portfolio.slug %}">О мне</a></li>
                 <li><a href="{{ portfolio.get_absolute_url }}contact/">Контакты</a></li>
-{#                <li><a href="{{ portfolio.get_absolute_url }}login/">Вход</a></li>#}
-{#                <li><a href="{% url 'register' slug=portfolio.slug %}">Регистрация</a></li>#}
+                {#                <li><a href="{{ portfolio.get_absolute_url }}login/">Вход</a></li>#}
+                {#                <li><a href="{% url 'register' slug=portfolio.slug %}">Регистрация</a></li>#}
 
                 {% if request.user == portfolio.user %}
-                    <li><a href="{% url 'add_post' slug=portfolio.slug %}">Добавить пост</a></li>
-                    <li><a href="{% url 'post_statistics' slug=portfolio.slug %}">Упровление постами</a></li>
-                    <li><a href="{% url 'readers' slug=portfolio.slug %}">Читатели</a></li>
+                    <li><a href="{% url 'portfolio:add_post' slug=portfolio.slug %}">Добавить пост</a></li>
+                    <li><a href="{% url 'portfolio:post_statistics' slug=portfolio.slug %}">Упровление постами</a></li>
+                    <li><a href="{% url 'portfolio:readers' slug=portfolio.slug %}">Читатели</a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Информация о портфолио</a></li>
-
                 {% endif %}
             </ul>
         </div>

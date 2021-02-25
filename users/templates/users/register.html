@@ -1,0 +1,64 @@
+{% extends 'users_base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block main %}
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Регистрация</h1>
+            </div>
+        </div>
+    </section>
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="display: flex;flex-direction: column;align-items: center;">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="col">
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.first_name.label }}
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.last_name.label }}
+                            {{ form.last_name }}
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.email.label }}
+                            {{ form.email }}
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.username.label }}
+                            {{ form.username }}
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.password.label }}
+                            {{ form.password }}
+                        </div>
+                        <div class="col-md-12 col-sm-12 mb-3">
+                            {{ form.password2.label }}
+                            {{ form.password2 }}
+                        </div>
+
+                        <div class="col-lg-12 col-md-6 mt-4">
+                            <button type="submit" id="form-submit" class="btn btn-outline-primary">
+                                Зарегистрироваться
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="errorlist mt-3">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                {{ field.label }}: {{ error|escape }}
+                            {% endfor %}
+
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

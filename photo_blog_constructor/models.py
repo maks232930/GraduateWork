@@ -6,10 +6,12 @@ from users.models import User
 
 
 class Portfolio(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя', max_length=30, unique=True)
     slug = models.SlugField(max_length=30, unique=True)
     description = models.TextField(verbose_name='Описание блога')
+    contact_phone = models.CharField(verbose_name='Телефон для связи', max_length=20, blank=True, null=True)
+    contact_email = models.CharField(verbose_name='Почта для связи', max_length=40, blank=True, null=True)
     logo = models.ImageField(verbose_name='Логотип', upload_to='logo/')
     logo_ico = models.ImageField(verbose_name='Логотип ico', upload_to='logo/ico/')
 
@@ -17,7 +19,7 @@ class Portfolio(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('home', kwargs={'slug': self.slug})
+        return reverse('portfolio:home', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Портфолио'
@@ -64,7 +66,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={'slug': self.portfolio.slug, 'name': self.url})
+        return reverse('portfolio:post_detail', kwargs={'slug': self.portfolio.slug, 'name': self.url})
 
     class Meta:
         verbose_name = 'Пост'
@@ -92,18 +94,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
-
-
-class BlackList(models.Model):
-    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
-    reader = models.ForeignKey(Reader, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Читатель {self.reader.user.get_full_name()} заблокирован на {self.portfolio.name}'
-
-    class Meta:
-        verbose_name = 'Черный список'
-        verbose_name_plural = 'Черные списки'
 
 
 class Like(models.Model):

@@ -9,7 +9,6 @@ from .models import (
     Post,
     Photo,
     Comment,
-    BlackList,
     Reader,
     Like,
     SocialLink
@@ -69,11 +68,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_display_links = ('reader', 'post')
 
 
-class BlackListAdmin(admin.ModelAdmin):
-    list_display = ('portfolio', 'reader')
-    list_display_links = ('portfolio', 'reader')
-
-
 class ReaderAdmin(admin.ModelAdmin):
     list_display = ('user', 'portfolio')
     list_display_links = ('user', 'portfolio')
@@ -91,6 +85,5 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(BlackList, BlackListAdmin)
 admin.site.register(Reader, ReaderAdmin)
 admin.site.register(Like, LikeAdmin)

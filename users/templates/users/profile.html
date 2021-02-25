@@ -1,15 +1,18 @@
 {% extends 'users_base.html' %}
 
+{% block title %}Профиль{% endblock %}
+
 {% block main %}
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Список существующих дневников</h1>
+                <h1 class="fw-light">Профиль</h1>
             </div>
         </div>
     </section>
 
     <div class="album py-5 bg-light">
+    <h2 style="text-align: center">Ваши дневники</h2>
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <table class="table">
@@ -26,7 +29,7 @@
                     {% for p in portfolio %}
                         <tr>
                             <th scope="row">{{ p.id }}</th>
-                            <td><img src="{{ p.logo.url }}" alt="" height="50px" width="50px"></td>
+                            <td><img src="{{ p.logo.url }}" alt="" width="50px" height="50px"></td>
                             <td>{{ p.name }}</td>
                             <td>{{ p.post_set.count }}</td>
                             <td><a class="btn btn-info" role="button"
@@ -38,4 +41,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
