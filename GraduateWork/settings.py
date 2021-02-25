@@ -131,6 +131,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     'photo_blog_constructor/static',
+    'users/static',
 )
 
 MEDIA_URL = '/media/'

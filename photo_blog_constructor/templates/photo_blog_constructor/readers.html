@@ -8,7 +8,7 @@
     <div style="max-width: 1000px" class="inner clearfix">
         <h1 style="text-align: center; margin-bottom: 15px">Читатели</h1>
         <form action="" method="post">
-        {% csrf_token %}
+            {% csrf_token %}
             <table class="table">
                 <thead>
                 <tr>
@@ -24,20 +24,28 @@
                 <tbody>
 
                 {% for reader in readers %}
-                    <tr>
-                        <th scope="row">{{ reader.id }}</th>
-                        <td style="text-align: left">{{ reader.user.last_name }}</td>
-                        <td style="text-align: left">{{ reader.user.first_name }}</td>
-                        <td style="text-align: left">{{ reader.user.email }}</td>
-                        <td style="text-align: left">{{ reader.like_set.count }}</td>
-                        <td style="text-align: left">
-                            <input type="checkbox" name="black" value="{{ reader.id }}">
-                        </td>
-                    </tr>
+                    {% if reader.user != portfolio.user %}
+                        <tr>
+                            <th scope="row">{{ reader.id }}</th>
+                            <td style="text-align: left">{{ reader.user.last_name }}</td>
+                            <td style="text-align: left">{{ reader.user.first_name }}</td>
+                            <td style="text-align: left">{{ reader.user.email }}</td>
+                            <td style="text-align: left">{{ reader.like_set.count }}</td>
+                            <td style="text-align: left">
+                                <input type="checkbox" name="black" value="{{ reader.id }}"
+                                       {% if reader.is_blocked == True %}checked{% endif %}>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
-            <button type="submit" class="btn btn-success">Сохранить</button>
+            {% if readers.count == 0 %}
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            {% else %}
+                <h2 style="text-align: center">У вас не читателей(</h2>
+            {% endif %}
+
         </form>
     </div>
 {% endblock %}

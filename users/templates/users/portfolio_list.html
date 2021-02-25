@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Список существующих дневников</h1>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Логотип</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Количество постов</th>
+                        <th scope="col">Ссылка</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for portfolio in portfolios %}
+                        <tr>
+                            <th scope="row">{{ portfolio.id }}</th>
+                            <td><img src="{{ portfolio.logo.url }}" alt=""></td>
+                            <td>{{ portfolio.name }}</td>
+                            <td>{{ portfolio.post_set.count }}</td>
+                            <td><a class="btn btn-info" role="button"
+                                   href="{% url 'home' slug=portfolio.slug %}">Перейти</a></td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

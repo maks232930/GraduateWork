@@ -175,22 +175,38 @@ class PostDeleteView(View):
         return redirect('post_statistics', slug=portfolio.slug)
 
 
-class ReaderView(View):
+# class ReaderView(View):
+#
+#     def get(self, request, slug):
+#         user = request.user
+#         portfolio = Portfolio.objects.get(slug=slug)
+#         if portfolio.user != user:
+#             return redirect('home', slug=slug)
+#         readers = Reader.objects.filter(portfolio=portfolio)
+#         context = {'portfolio': portfolio, 'readers': readers}
+#         return render(request, 'photo_blog_constructor/readers.html', context)
+#
+#     def post(self, request, slug):
+#         user = request.user
+#         portfolio = Portfolio.objects.get(slug=slug)
+#         if portfolio.user != user:
+#             return redirect('home', slug=slug)
+#         readers_id = request.POST.getlist('black')
+#         for reader in readers_id:
+#             if
+#         # for reader in readers_id:
 
-    def get(self, request, slug):
-        user = request.user
-        portfolio = Portfolio.objects.get(slug=slug)
-        if portfolio.user != user:
-            return redirect('home', slug=slug)
-        readers = Reader.objects.filter(portfolio=portfolio)
-        context = {'portfolio': portfolio, 'readers': readers}
-        return render(request, 'photo_blog_constructor/readers.html', context)
-
-    def post(self, request, slug):
-        user = request.user
-        portfolio = Portfolio.objects.get(slug=slug)
-        if portfolio.user != user:
-            return redirect('home', slug=slug)
+def reader_view(request, slug):
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != request.user:
+        return redirect('home', slug=slug)
+    readers = Reader.objects.filter(portfolio=portfolio)
+    if request.method == 'POST':
         readers_id = request.POST.getlist('black')
-        # for reader in readers_id:
-
+        for reader in readers_id:
+            black = readers.get(pk=reader)
+            black.is_blocked = True
+            black.save()
+            return redirect('readers', slug=portfolio.slug)
+    context = {'portfolio': portfolio, 'readers': readers}
+    return render(request, 'photo_blog_constructor/readers.html', context)
