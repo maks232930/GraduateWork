@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование дневника{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block main %}
+    <div class="inner clearfix" style="max-width: 833px">
+        <h2 style="text-align: center; margin-bottom: 15px">Редактирование дневника</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Имя дневника</p>
+            {{ form.name }}
+            <p>Описание дневника</p>
+            {{ form.description }}
+            <p>Логопит</p>
+            <p>{{ form.logo }}</p>
+            <p>Логотип ico</p>
+            <p>{{ form.logo_ico }}</p>
+            <p>Телефон для связи</p>
+            {{ form.contact_phone }}
+            <p>Почта для связи</p>
+            {{ form.contact_email }}
+            {#            {% for field in form %}#}
+            {#                <p>{{ field }}</p>#}
+            {#            {% endfor %}#}
+            <button type="submit" class="btn btn-default">Сохранить</button>
+        </form>
+        <div class="errorlist mt-3">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        {{ field.label }}: {{ error|escape }}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+

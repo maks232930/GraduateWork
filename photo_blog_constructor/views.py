@@ -5,7 +5,7 @@ from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .forms import PostForm, CommentForm, ContactForm
+from .forms import PostForm, CommentForm, ContactForm, PortfolioForm
 from .models import Portfolio, Post, Comment, Reader, Photo, Contact
 
 
@@ -270,3 +270,19 @@ def delete_message(request, slug, pk):
         return redirect('portfolio:messages', slug=slug)
     context = {'portfolio': portfolio, 'message': message}
     return render(request, 'photo_blog_constructor/delete_message.html', context)
+
+
+@login_required
+def info_portfolio(request, slug):
+    user = request.user
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != user:
+        return redirect('home', slug=slug)
+    form = PortfolioForm(instance=portfolio)
+    if request.method == 'POST':
+        form = PortfolioForm(request.POST or None, instance=portfolio)
+        if form.is_valid():
+            form.save()
+            return redirect('portfolio:home', slug=portfolio.slug)
+    context = {'portfolio': portfolio, 'form': form}
+    return render(request, 'photo_blog_constructor/edit_profile.html', context)

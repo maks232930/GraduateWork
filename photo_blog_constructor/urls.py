@@ -12,7 +12,8 @@ from .views import (
     about_view,
     message_view,
     delete_message,
-    message_detail
+    message_detail,
+    info_portfolio
 )
 
 app_name = 'portfolio'
@@ -24,6 +25,7 @@ urlpatterns = [
     path('<str:slug>/post-management/', PostStatisticsView.as_view(), name='post_statistics'),
     path('<str:slug>/profile/', ProfileView.as_view(), name='profile'),
     path('<str:slug>/readers/', reader_view, name='readers'),
+    path('<str:slug>/edit/', info_portfolio, name='edit_portfolio'),
     path('<str:slug>/messages/', message_view, name='messages'),
     path('<str:slug>/messages/delete/<int:pk>/', delete_message, name='delete_message'),
     path('<str:slug>/messages/<int:pk>/', message_detail, name='message_detail'),

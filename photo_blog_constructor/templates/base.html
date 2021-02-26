@@ -34,7 +34,8 @@
                         {% if portfolio.get_count_not_read_message %}
                             <b style="color: red">{{ portfolio.get_count_not_read_message }}</b>
                         {% endif %} </a></li>
-                    <li><a href="{{ portfolio.get_absolute_url }}login/">Информация о портфолио</a></li>
+                    <li><a href="{% url 'portfolio:edit_portfolio' slug=portfolio.slug %}">Изменить портфолио</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -70,6 +71,6 @@
 <script src="{% static 'CaptionHoverEffects/js/modernizr.custom.js' %}"></script>
 <script src="{% static 'CaptionHoverEffects/js/toucheffects.js' %}"></script>
 
-
+{% block script %}{% endblock %}
 </body>
 </html>

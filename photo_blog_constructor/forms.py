@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
 from pytils import translit
 
-from .models import Comment, Post, Contact
+from .models import Comment, Post, Contact, Portfolio
 
 
 class CommentForm(forms.ModelForm):
@@ -60,4 +60,16 @@ class ContactForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'placeholder': 'Email', 'style': 'width:100%'}),
             'message': forms.Textarea(attrs={'placeholder': 'Сообщение', 'style': 'width:100%'}),
 
+        }
+
+
+class PortfolioForm(forms.ModelForm):
+    class Meta:
+        model = Portfolio
+        fields = ('name', 'description', 'contact_phone', 'contact_email', 'logo', 'logo_ico',)
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Название дневника', 'style': 'width:100%'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Описание', 'style': 'width:100%'}),
+            'contact_phone': forms.TextInput(attrs={'placeholder': 'Номер телефона', 'style': 'width:100%'}),
+            'contact_email': forms.TextInput(attrs={'placeholder': 'Email для связи', 'style': 'width:100%'}),
         }
