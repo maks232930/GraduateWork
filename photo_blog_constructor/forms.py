@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
 from pytils import translit
 
-from .models import Comment, Post, Category
+from .models import Comment, Post, Contact
 
 
 class CommentForm(forms.ModelForm):
@@ -25,6 +25,7 @@ class CommentForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание')
     files = MultiImageField(min_num=0, max_num=3, label='Фото 600х300', required=True)
+
     # category = forms.ModelChoiceField(queryset=Category.objects.filter(portfolio=))
 
     class Meta:
@@ -46,3 +47,17 @@ class PostForm(forms.ModelForm):
         url = translit.translify(self.cleaned_data['title'])
         instance.url = f'{random.randint(1, 100000)}-{slugify(url)}'
         return instance
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ('portfolio', 'name', 'topic', 'email', 'message')
+        widgets = {
+            'portfolio': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={'placeholder': 'Имя', 'style': 'width:100%'}),
+            'topic': forms.TextInput(attrs={'placeholder': 'Тема', 'style': 'width:100%'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email', 'style': 'width:100%'}),
+            'message': forms.Textarea(attrs={'placeholder': 'Сообщение', 'style': 'width:100%'}),
+
+        }

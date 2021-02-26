@@ -4,14 +4,15 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import (
-    Portfolio,
     Category,
     Post,
     Photo,
     Comment,
     Reader,
     Like,
-    SocialLink
+    SocialLink,
+    Portfolio,
+    Contact
 )
 
 
@@ -80,6 +81,10 @@ class LikeAdmin(admin.ModelAdmin):
     search_fields = ('post',)
 
 
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('portfolio', 'name', 'email', 'message', 'is_read')
+
+
 admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
@@ -87,3 +92,4 @@ admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Reader, ReaderAdmin)
 admin.site.register(Like, LikeAdmin)
+admin.site.register(Contact, ContactAdmin)

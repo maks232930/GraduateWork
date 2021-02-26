@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Сообщения{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block main %}
+    <div style="max-width: 1000px" class="inner clearfix">
+        <h1 style="text-align: center; margin-bottom: 15px">Сообщения</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Имя</th>
+                <th>Дата</th>
+                <th>email</th>
+                <th>Тема</th>
+                <th>Прочитано</th>
+                <th>Удалить</th>
+                <th>Посмотреть</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for message in messages %}
+                <tr>
+                    <th scope="row">{{ message.id }}</th>
+                    <td style="text-align: left">{{ message.name }}</td>
+                    <td style="text-align: left">{{ message.date }}</td>
+                    <td style="text-align: left">{{ message.email }}</td>
+                    <td style="text-align: left">{{ message.topic }}</td>
+                    {% if message.is_read %}
+                        <td style="text-align: left">Прочитано</td>
+                    {% else %}
+                        <td style="text-align: left; color: red">Не прочитано!!</td>
+                    {% endif %}
+                    <td style="text-align: left"><a class="btn btn-info" role="button"
+                                                    href="{% url 'portfolio:delete_message' slug=portfolio.slug pk=message.id %}">Удалить</a>
+                    </td>
+                    <td style="text-align: left"><a class="btn btn-info" role="button"
+                                                    href="{% url 'portfolio:message_detail' slug=portfolio.slug pk=message.id %}">Посмотреть</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

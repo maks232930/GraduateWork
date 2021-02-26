@@ -21,6 +21,9 @@ class Portfolio(models.Model):
     def get_absolute_url(self):
         return reverse('portfolio:home', kwargs={'slug': self.slug})
 
+    def get_count_not_read_message(self):
+        return self.contact_set.filter(is_read=False).count()
+
     class Meta:
         verbose_name = 'Портфолио'
         verbose_name_plural = 'Портфолио'
@@ -132,3 +135,20 @@ class SocialLink(models.Model):
     class Meta:
         verbose_name = "Соцсеть"
         verbose_name_plural = "Соцсети"
+
+
+class Contact(models.Model):
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='Имя', max_length=30)
+    email = models.EmailField(max_length=30)
+    topic = models.CharField(verbose_name='Тема', max_length=20)
+    message = models.TextField(max_length=10000)
+    date = models.DateTimeField(verbose_name='Дата и время отправки', auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Сообщение на {self.portfolio.name}'
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'

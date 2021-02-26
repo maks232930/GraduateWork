@@ -1,11 +1,12 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .forms import PostForm, CommentForm
-from .models import Portfolio, Post, Comment, Reader, Photo
+from .forms import PostForm, CommentForm, ContactForm
+from .models import Portfolio, Post, Comment, Reader, Photo, Contact
 
 
 class HomeView(View):
@@ -196,6 +197,7 @@ class PostDeleteView(View):
 #             if
 #         # for reader in readers_id:
 
+@login_required
 def reader_view(request, slug):
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != request.user:
@@ -214,5 +216,57 @@ def reader_view(request, slug):
 
 def about_view(request, slug):
     portfolio = Portfolio.objects.get(slug=slug)
-    context = {'portfolio': portfolio}
+    form = ContactForm()
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        del form.errors['portfolio']
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.portfolio = portfolio
+            form.save()
+            return redirect('portfolio:home', slug=portfolio.slug)
+    context = {'portfolio': portfolio, 'form': form}
     return render(request, 'photo_blog_constructor/about.html', context)
+
+
+@login_required
+def message_view(request, slug):
+    user = request.user
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != user:
+        return redirect('home', slug=slug)
+    messages = Contact.objects.filter(portfolio=portfolio)
+    context = {'portfolio': portfolio, 'messages': messages}
+    return render(request, 'photo_blog_constructor/message.html', context)
+
+
+@login_required
+def message_detail(request, slug, pk):
+    user = request.user
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != user:
+        return redirect('home', slug=slug)
+    message = Contact.objects.get(pk=pk)
+    if message.is_read:
+        context = {'portfolio': portfolio, 'message': message}
+        return render(request, 'photo_blog_constructor/message_detail.html', context)
+    else:
+        message.is_read = True
+        message.save()
+        context = {'portfolio': portfolio, 'message': message}
+        return render(request, 'photo_blog_constructor/message_detail.html', context)
+
+
+@login_required
+def delete_message(request, slug, pk):
+    user = request.user
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != user:
+        return redirect('home', slug=slug)
+    message = Contact.objects.get(pk=pk)
+    if request.method == 'POST':
+        message.delete()
+        return redirect('portfolio:messages', slug=slug)
+    context = {'portfolio': portfolio, 'message': message}
+    return render(request, 'photo_blog_constructor/delete_message.html', context)

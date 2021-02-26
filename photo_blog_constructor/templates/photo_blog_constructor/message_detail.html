@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Просмотр сообщения{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block main %}
+    <div class="inner clearfix">
+        <h2 style="text-align: center">Просмотр сообщения</h2>
+        <p class="desc" style="margin-top: 0">{{ message.message }}</p>
+        <a href="{% url 'portfolio:messages' slug=portfolio.slug %}" class="btn btn-warning"
+           style="width: 20%">Назад</a>
+        <a href="{% url 'portfolio:delete_message' slug=portfolio.slug pk=message.id %}" class="btn btn-warning"
+           style="width: 20%">Удалить</a>
+    </div>
+{% endblock %}

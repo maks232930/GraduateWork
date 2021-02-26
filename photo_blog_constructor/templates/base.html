@@ -24,15 +24,16 @@
         <div class="menu">
             <ul>
                 <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
-                <li><a href="{% url 'portfolio:about' portfolio.slug %}">О мне</a></li>
-                <li><a href="{{ portfolio.get_absolute_url }}contact/">Контакты</a></li>
-                {#                <li><a href="{{ portfolio.get_absolute_url }}login/">Вход</a></li>#}
-                {#                <li><a href="{% url 'register' slug=portfolio.slug %}">Регистрация</a></li>#}
+                <li><a href="{% url 'portfolio:about' portfolio.slug %}">Информация о портфолио</a></li>
 
                 {% if request.user == portfolio.user %}
                     <li><a href="{% url 'portfolio:add_post' slug=portfolio.slug %}">Добавить пост</a></li>
                     <li><a href="{% url 'portfolio:post_statistics' slug=portfolio.slug %}">Упровление постами</a></li>
                     <li><a href="{% url 'portfolio:readers' slug=portfolio.slug %}">Читатели</a></li>
+                    <li><a href="{% url 'portfolio:messages' slug=portfolio.slug %}">Сообщения
+                        {% if portfolio.get_count_not_read_message %}
+                            <b style="color: red">{{ portfolio.get_count_not_read_message }}</b>
+                        {% endif %} </a></li>
                     <li><a href="{{ portfolio.get_absolute_url }}login/">Информация о портфолио</a></li>
                 {% endif %}
             </ul>

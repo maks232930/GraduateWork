@@ -7,8 +7,29 @@
 {% block main %}
     <div class="inner clearfix">
         <h2 style="text-align: center">Информация о блоге</h2>
-        <div class="panel-body">
-            {{ portfolio.description }}
+        <p class="desc" style="margin-top: 0">{{ portfolio.description }}</p>
+        <h3 style="text-align: center">Контакты</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <p>{{ field }}</p>
+            {% endfor %}
+            <button type="submit">Отправить</button>
+        </form>
+        <div class="errorlist mt-3">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        {{ field.label }}: {{ error|escape }}
+                    {% endfor %}
+
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="address">
+            <p><b>Телефон.</b> {{ portfolio.contact_phone }}</p>
+            <p><b>Email.</b> {{ portfolio.contact_email }}</p>
         </div>
     </div>
 
