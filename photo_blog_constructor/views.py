@@ -7,11 +7,12 @@ from django.views.generic import View
 
 from .forms import PostForm, CommentForm, ContactForm, PortfolioForm
 from .models import Portfolio, Post, Comment, Reader, Photo, Contact
+from .utils import is_reader, ReaderMixin
 
 
-class HomeView(View):
-
+class HomeView(View, ReaderMixin):
     def get(self, request, slug):
+        self.is_reader(request=request, slug=slug)
         portfolio = Portfolio.objects.get(slug=slug)
         posts = Post.objects.filter(portfolio=portfolio)
         context = {'posts': posts, 'portfolio': portfolio}
@@ -19,7 +20,6 @@ class HomeView(View):
 
 
 class PostDetail(View):
-
     def get(self, request, slug, name):
         portfolio = Portfolio.objects.get(slug=slug)
         form = CommentForm()
@@ -65,13 +65,6 @@ class PostDetail(View):
 #             form = ReaderRegistrationForm()
 #             context = {'portfolio': portfolio, 'form': form}
 #             return render(request, 'photo_blog_constructor/register.html', context)
-
-
-class ProfileView(View):
-
-    def get(self, request, slug):
-        portfolio = Portfolio.objects.get(slug=slug)
-        return render(request, 'photo_blog_constructor/profile.html', {'portfolio': portfolio})
 
 
 class PostCreateView(View):
@@ -176,27 +169,6 @@ class PostDeleteView(View):
         return redirect('post_statistics', slug=portfolio.slug)
 
 
-# class ReaderView(View):
-#
-#     def get(self, request, slug):
-#         user = request.user
-#         portfolio = Portfolio.objects.get(slug=slug)
-#         if portfolio.user != user:
-#             return redirect('home', slug=slug)
-#         readers = Reader.objects.filter(portfolio=portfolio)
-#         context = {'portfolio': portfolio, 'readers': readers}
-#         return render(request, 'photo_blog_constructor/readers.html', context)
-#
-#     def post(self, request, slug):
-#         user = request.user
-#         portfolio = Portfolio.objects.get(slug=slug)
-#         if portfolio.user != user:
-#             return redirect('home', slug=slug)
-#         readers_id = request.POST.getlist('black')
-#         for reader in readers_id:
-#             if
-#         # for reader in readers_id:
-
 @login_required
 def reader_view(request, slug):
     portfolio = Portfolio.objects.get(slug=slug)
@@ -214,6 +186,7 @@ def reader_view(request, slug):
     return render(request, 'photo_blog_constructor/readers.html', context)
 
 
+@is_reader
 def about_view(request, slug):
     portfolio = Portfolio.objects.get(slug=slug)
     form = ContactForm()

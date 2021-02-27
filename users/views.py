@@ -31,7 +31,7 @@ def login_view(request):
                 login(request, user)
                 return redirect('users:home')
             else:
-                return redirect('users:home')
+                return redirect('users:login')
     form = UserLoginForm()
     context = {'form': form}
     return render(request, 'users/login.html', context)

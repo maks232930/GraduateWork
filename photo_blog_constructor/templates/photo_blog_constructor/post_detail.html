@@ -66,17 +66,21 @@
                 <h3>Будь первым!!!</h3>
             {% endif %}
 
+            {% if request.user.is_authenticated %}
+                <div class="comments-fields clearfix">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ form.content }}
+                        {{ form.reader }}
+                        {{ form.post }}
+                        <button type="submit" class="btn btn-default" href="">Отправить</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'users:login' %}"><h2 style="text-align: center">Войти</h2></a>
+                <a href="{% url 'users:register' %}"><h2 style="text-align: center">Зарегистрироваться</h2></a>
+            {% endif %}
 
-            <div class="comments-fields clearfix">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {{ form.content }}
-                    {{ form.reader }}
-                    {{ form.post }}
-                    <button type="submit" class="btn btn-default" href="">Отправить</button>
-                </form>
-
-            </div>
 
         </div>
         <!-- \ Comments -->
