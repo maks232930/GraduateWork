@@ -8,7 +8,10 @@ def is_reader(func):
         if request.user.is_authenticated:
             user = request.user
             portfolio = Portfolio.objects.get(slug=slug)
-            if Reader.objects.filter(portfolio=portfolio, user=user):
+            reader = Reader.objects.filter(portfolio=portfolio, user=user).first()
+            if reader is not None:
+                if reader.is_blocked:
+                    return redirect('users:home')
                 return func(request, slug, *args, **kwargs)
             else:
                 reader = Reader.objects.create(portfolio=portfolio, user=user)
@@ -21,19 +24,19 @@ def is_reader(func):
 
 class ReaderMixin:
 
-    def is_reader(self, request, slug, *args, **kwargs):
+    def is_reader(self, request, slug):
         if request.user.is_authenticated:
             user = request.user
             portfolio = Portfolio.objects.get(slug=slug)
             reader = Reader.objects.filter(portfolio=portfolio, user=user).first()
             if reader is not None:
                 if reader.is_blocked:
-                    return redirect('users:home')
-                return
+                    return False
+                return True
             elif portfolio.user == user:
-                return
+                return True
             else:
                 reader = Reader.objects.create(portfolio=portfolio, user=user)
                 reader.save()
-                return
-        return
+                return True
+        return True

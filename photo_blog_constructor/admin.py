@@ -31,7 +31,7 @@ class PortfolioAdmin(admin.ModelAdmin):
     inlines = [SocialLinkAdmin]
 
     def get_logo(self, obj):
-        return mark_safe(f'<img src="{obj.logo.url}">')
+        return mark_safe(f'<img src="{obj.logo.url}" height="50px" width="50px">')
 
 
 class CategoryAdmin(admin.ModelAdmin):

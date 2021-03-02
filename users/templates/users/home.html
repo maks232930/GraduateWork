@@ -26,7 +26,7 @@
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Посмотреть пример
                                     </button>
                                     {% if request.user.is_authenticated %}
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Создать</button>{% endif %}
+                                        <a href="{% url 'users:portfolio_create' %}" type="button" class="btn btn-sm btn-outline-secondary">Создать</a>{% endif %}
                                 </div>
                             </div>
                         </div>

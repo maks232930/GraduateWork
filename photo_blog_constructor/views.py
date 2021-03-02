@@ -12,59 +12,40 @@ from .utils import is_reader, ReaderMixin
 
 class HomeView(View, ReaderMixin):
     def get(self, request, slug):
-        self.is_reader(request=request, slug=slug)
-        portfolio = Portfolio.objects.get(slug=slug)
-        posts = Post.objects.filter(portfolio=portfolio)
-        context = {'posts': posts, 'portfolio': portfolio}
-        return render(request, 'photo_blog_constructor/index.html', context)
+        if self.is_reader(request=request, slug=slug):
+            portfolio = Portfolio.objects.get(slug=slug)
+            posts = Post.objects.filter(portfolio=portfolio)
+            context = {'posts': posts, 'portfolio': portfolio}
+            return render(request, 'photo_blog_constructor/index.html', context)
+        return redirect('users:home')
 
 
-class PostDetail(View):
+class PostDetail(View, ReaderMixin):
     def get(self, request, slug, name):
-        portfolio = Portfolio.objects.get(slug=slug)
-        form = CommentForm()
-        post = Post.objects.get(url=name)
-        comments = Comment.objects.filter(post=post)
-        post.views = F('views') + 1
-        post.save()
-        context = {'post': post, 'portfolio': portfolio, 'comments': comments, 'form': form}
-        return render(request, 'photo_blog_constructor/post_detail.html', context)
+        if self.is_reader(request=request, slug=slug):
+            portfolio = Portfolio.objects.get(slug=slug)
+            form = CommentForm()
+            post = Post.objects.get(url=name)
+            comments = Comment.objects.filter(post=post)
+            post.views = F('views') + 1
+            post.save()
+            context = {'post': post, 'portfolio': portfolio, 'comments': comments, 'form': form}
+            return render(request, 'photo_blog_constructor/post_detail.html', context)
+        return redirect('users:home')
 
     def post(self, request, slug, name):
-        form = CommentForm(request.POST)
-        post = Post.objects.get(url=name)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            reader = Reader.objects.get(user=request.user)
-            comment.reader = reader
-            comment.save()
+        if self.is_reader(request=request, slug=slug):
+            form = CommentForm(request.POST)
+            post = Post.objects.get(url=name)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = post
+                reader = Reader.objects.get(user=request.user, portfolio=post.portfolio)
+                comment.reader = reader
+                comment.save()
+                return redirect(post.get_absolute_url())
             return redirect(post.get_absolute_url())
-        return redirect(post.get_absolute_url())
-
-
-# class ReaderView(View):
-#
-#     def get(self, request, slug):
-#         form = ReaderRegistrationForm()
-#         portfolio = Portfolio.objects.get(slug=slug)
-#         context = {'portfolio': portfolio, 'form': form}
-#         return render(request, 'photo_blog_constructor/register.html', context)
-#
-#     def post(self, request, slug):
-#         portfolio = Portfolio.objects.get(slug=slug)
-#         form = ReaderRegistrationForm(request.POST)
-#         if form.is_valid():
-#             new_user = form.save(commit=False)
-#             new_user.set_password(form.cleaned_data['password'])
-#             new_user.save()
-#             reader = Reader.objects.create(user=new_user, portfolio=portfolio)
-#             reader.save()
-#             return redirect(portfolio.get_absolute_url())
-#         else:
-#             form = ReaderRegistrationForm()
-#             context = {'portfolio': portfolio, 'form': form}
-#             return render(request, 'photo_blog_constructor/register.html', context)
+        return redirect('users:home')
 
 
 class PostCreateView(View):
@@ -166,7 +147,7 @@ class PostDeleteView(View):
             return redirect('home', slug=slug)
         post = Post.objects.get(url=name)
         post.delete()
-        return redirect('post_statistics', slug=portfolio.slug)
+        return redirect('portfolio:post_statistics', slug=portfolio.slug)
 
 
 @login_required
@@ -181,7 +162,7 @@ def reader_view(request, slug):
             black = readers.get(pk=reader)
             black.is_blocked = True
             black.save()
-            return redirect('readers', slug=portfolio.slug)
+            return redirect('portfolio:readers', slug=portfolio.slug)
     context = {'portfolio': portfolio, 'readers': readers}
     return render(request, 'photo_blog_constructor/readers.html', context)
 

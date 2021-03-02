@@ -2,9 +2,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from django.template.defaultfilters import slugify
+
+from pytils import translit
 
 from photo_blog_constructor.models import Portfolio
-from .forms import UserLoginForm, RegistrationForm
+from .forms import UserLoginForm, RegistrationForm, PortfolioForm
+from .models import User
 
 
 def home_view(request):
@@ -59,8 +63,25 @@ def user_logout(request):
 
 
 @login_required
-def profile_view(request):
-    user = request.user
+def profile_view(request, username):
+    user = User.objects.get(username=username)
     portfolio = Portfolio.objects.filter(user=user)
     context = {'portfolio': portfolio}
     return render(request, 'users/profile.html', context)
+
+
+@login_required
+def portfolio_create(request):
+    user = request.user
+    form = PortfolioForm(initial={'user': user})
+
+    if request.method == 'POST':
+        form = PortfolioForm(request.POST, request.FILES)
+        if form.is_valid():
+            portfolio = form.save(commit=False)
+            portfolio.slug = slugify(translit.translify(portfolio.name))
+            portfolio.save()
+            return redirect(portfolio.get_absolute_url())
+
+    context = {'form': form}
+    return render(request, 'users/portfolio_create.html', context)
