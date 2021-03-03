@@ -10,15 +10,21 @@
 
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
-{#    <style>#}
+    <style>
 
-{#        body{#}
-{#            background: black;#}
-{#        }#}
-{#        .site-header{#}
-{#            background: #c3c3c3;#}
-{#        }#}
-{#    </style>#}
+        body{
+            background: {{ portfolio.home_color }};
+        }
+        .site-header{
+            background: {{ portfolio.sidebar_color }};
+        }
+        input{
+            background: {{ portfolio.input_color }};
+        }
+        textarea{
+            background: {{ portfolio.input_color }};
+        }
+    </style>
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
@@ -39,6 +45,7 @@
 
                 {% if request.user == portfolio.user %}
                     <li><a href="{% url 'portfolio:add_post' slug=portfolio.slug %}">Добавить пост</a></li>
+                    <li><a href="{% url 'portfolio:add_category' slug=portfolio.slug %}">Добавить категорию</a></li>
                     <li><a href="{% url 'portfolio:post_statistics' slug=portfolio.slug %}">Упровление постами</a></li>
                     <li><a href="{% url 'portfolio:readers' slug=portfolio.slug %}">Читатели</a></li>
                     <li><a href="{% url 'portfolio:messages' slug=portfolio.slug %}">Сообщения

@@ -14,6 +14,10 @@ class Portfolio(models.Model):
     contact_email = models.CharField(verbose_name='Почта для связи', max_length=40, blank=True, null=True)
     logo = models.ImageField(verbose_name='Логотип', upload_to='logo/')
     logo_ico = models.ImageField(verbose_name='Логотип ico', upload_to='logo/ico/')
+    home_color = models.CharField(verbose_name='Цвет на главной(пример: #FFFAFA)', max_length=10, default='#FFFFFF')
+    sidebar_color = models.CharField(verbose_name='Цвет боковой панели(пример: #FFFAFA)', max_length=10,
+                                     default='#EAEAEA')
+    input_color = models.CharField(verbose_name='Цвет на главной(пример: #FFFAFA)', max_length=10, default='#EAEAEA')
 
     def __str__(self):
         return self.name
@@ -74,7 +78,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
-        ordering = ('id', )
+        ordering = ('id',)
 
 
 class Photo(models.Model):

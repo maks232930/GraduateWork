@@ -66,8 +66,13 @@ class ContactForm(forms.ModelForm):
 class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
-        fields = ('name', 'description', 'contact_phone', 'contact_email', 'logo', 'logo_ico',)
+        fields = (
+            'name', 'description', 'contact_phone', 'contact_email', 'logo', 'logo_ico', 'home_color', 'sidebar_color',
+            'input_color')
         widgets = {
+            'home_color': forms.TextInput(attrs={'type': 'color'}),
+            'sidebar_color': forms.TextInput(attrs={'type': 'color'}),
+            'input_color': forms.TextInput(attrs={'type': 'color'}),
             'name': forms.TextInput(attrs={'placeholder': 'Название дневника', 'style': 'width:100%'}),
             'description': forms.Textarea(attrs={'placeholder': 'Описание', 'style': 'width:100%'}),
             'contact_phone': forms.TextInput(attrs={'placeholder': 'Номер телефона', 'style': 'width:100%'}),
