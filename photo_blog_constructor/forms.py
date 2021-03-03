@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 from multiupload.fields import MultiImageField
 from pytils import translit
 
-from .models import Comment, Post, Contact, Portfolio
+from .models import Comment, Post, Contact, Portfolio, Category
 
 
 class CommentForm(forms.ModelForm):
@@ -73,3 +73,18 @@ class PortfolioForm(forms.ModelForm):
             'contact_phone': forms.TextInput(attrs={'placeholder': 'Номер телефона', 'style': 'width:100%'}),
             'contact_email': forms.TextInput(attrs={'placeholder': 'Email для связи', 'style': 'width:100%'}),
         }
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Название категории', 'style': 'width:100%'})
+        }
+
+    def save(self, commit=True):
+        instance = super(CategoryForm, self).save(commit)
+        url = translit.translify(self.cleaned_data['name'])
+        instance.slug = slugify(url)
+        return instance

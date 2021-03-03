@@ -9,6 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{% static 'style.css' %}">
+
+{#    <style>#}
+
+{#        body{#}
+{#            background: black;#}
+{#        }#}
+{#        .site-header{#}
+{#            background: #c3c3c3;#}
+{#        }#}
+{#    </style>#}
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
@@ -25,6 +35,7 @@
             <ul>
                 <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
                 <li><a href="{% url 'portfolio:about' portfolio.slug %}">Информация о портфолио</a></li>
+            <li><a href="{% url 'users:home' %}">На главную</a></li>
 
                 {% if request.user == portfolio.user %}
                     <li><a href="{% url 'portfolio:add_post' slug=portfolio.slug %}">Добавить пост</a></li>

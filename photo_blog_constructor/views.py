@@ -5,8 +5,8 @@ from django.db.models import F
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .forms import PostForm, CommentForm, ContactForm, PortfolioForm
-from .models import Portfolio, Post, Comment, Reader, Photo, Contact
+from .forms import PostForm, CommentForm, ContactForm, PortfolioForm, CategoryForm
+from .models import Portfolio, Post, Comment, Reader, Photo, Contact, Like
 from .utils import is_reader, ReaderMixin
 
 
@@ -29,6 +29,11 @@ class PostDetail(View, ReaderMixin):
             comments = Comment.objects.filter(post=post)
             post.views = F('views') + 1
             post.save()
+            if request.GET.get('like'):
+                reader = Reader.objects.get(user=request.user, portfolio=post.portfolio)
+                if not Like.objects.filter(post=post, reader=reader):
+                    like = Like.objects.create(post=post, reader=reader)
+                    like.save()
             context = {'post': post, 'portfolio': portfolio, 'comments': comments, 'form': form}
             return render(request, 'photo_blog_constructor/post_detail.html', context)
         return redirect('users:home')
@@ -135,7 +140,7 @@ class PostDeleteView(View):
         user = request.user
         portfolio = Portfolio.objects.get(slug=slug)
         if portfolio.user != user:
-            return redirect('home', slug=slug)
+            return redirect('portfolio:home', slug=slug)
         post = Post.objects.get(url=name)
         context = {'post': post, 'portfolio': portfolio}
         return render(request, 'photo_blog_constructor/delete_post.html', context)
@@ -154,7 +159,7 @@ class PostDeleteView(View):
 def reader_view(request, slug):
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != request.user:
-        return redirect('home', slug=slug)
+        return redirect('portfolio:home', slug=slug)
     readers = Reader.objects.filter(portfolio=portfolio)
     if request.method == 'POST':
         readers_id = request.POST.getlist('black')
@@ -189,7 +194,7 @@ def message_view(request, slug):
     user = request.user
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != user:
-        return redirect('home', slug=slug)
+        return redirect('portfolio:home', slug=slug)
     messages = Contact.objects.filter(portfolio=portfolio)
     context = {'portfolio': portfolio, 'messages': messages}
     return render(request, 'photo_blog_constructor/message.html', context)
@@ -200,7 +205,7 @@ def message_detail(request, slug, pk):
     user = request.user
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != user:
-        return redirect('home', slug=slug)
+        return redirect('portfolio:home', slug=slug)
     message = Contact.objects.get(pk=pk)
     if message.is_read:
         context = {'portfolio': portfolio, 'message': message}
@@ -217,7 +222,7 @@ def delete_message(request, slug, pk):
     user = request.user
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != user:
-        return redirect('home', slug=slug)
+        return redirect('portfolio:home', slug=slug)
     message = Contact.objects.get(pk=pk)
     if request.method == 'POST':
         message.delete()
@@ -231,7 +236,7 @@ def info_portfolio(request, slug):
     user = request.user
     portfolio = Portfolio.objects.get(slug=slug)
     if portfolio.user != user:
-        return redirect('home', slug=slug)
+        return redirect('portfolio:home', slug=slug)
     form = PortfolioForm(instance=portfolio)
     if request.method == 'POST':
         form = PortfolioForm(request.POST or None, instance=portfolio)
@@ -240,3 +245,20 @@ def info_portfolio(request, slug):
             return redirect('portfolio:home', slug=portfolio.slug)
     context = {'portfolio': portfolio, 'form': form}
     return render(request, 'photo_blog_constructor/edit_profile.html', context)
+
+
+def category_view(request, slug):
+    user = request.user
+    portfolio = Portfolio.objects.get(slug=slug)
+    if portfolio.user != user:
+        return redirect('portfolio:home', slug=slug)
+    form = CategoryForm()
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.portfolio = portfolio
+            category.save()
+            return redirect('portfolio:add_category', slug=portfolio.slug)
+    context = {'portfolio': portfolio, 'form': form}
+    return render(request, 'photo_blog_constructor/add_category.html', context)
