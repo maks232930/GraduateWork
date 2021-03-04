@@ -12,17 +12,62 @@
 
     <style>
 
-        body{
+        body {
             background: {{ portfolio.home_color }};
         }
-        .site-header{
+
+        .site-header {
             background: {{ portfolio.sidebar_color }};
         }
-        input{
+
+        input {
             background: {{ portfolio.input_color }};
         }
-        textarea{
+
+        textarea {
             background: {{ portfolio.input_color }};
+        }
+
+        p {
+            color: {{ portfolio.text_color }};
+        }
+
+        a, h1, h2, h3, h4, h5, h6 {
+            color: {{ portfolio.title_color }};
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            background: #fff;
+            width: 100px;
+            height: 100px;
+            border: 20px solid #0FFFFF;
+            border-radius: 50%;
+        }
+
+
+        /* -webkit */
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+
+        /* firefox */
+        input[type=color]::-moz-focus-inner {
+            border: none;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        input[type=color]::-moz-color-swatch {
+            border: none;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -41,7 +86,7 @@
             <ul>
                 <li><a href="{{ portfolio.get_absolute_url }}">Портфолио</a></li>
                 <li><a href="{% url 'portfolio:about' portfolio.slug %}">Информация о портфолио</a></li>
-            <li><a href="{% url 'users:home' %}">На главную</a></li>
+                <li><a href="{% url 'users:home' %}">На главную</a></li>
 
                 {% if request.user == portfolio.user %}
                     <li><a href="{% url 'portfolio:add_post' slug=portfolio.slug %}">Добавить пост</a></li>

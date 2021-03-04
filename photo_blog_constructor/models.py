@@ -18,6 +18,8 @@ class Portfolio(models.Model):
     sidebar_color = models.CharField(verbose_name='Цвет боковой панели(пример: #FFFAFA)', max_length=10,
                                      default='#EAEAEA')
     input_color = models.CharField(verbose_name='Цвет на главной(пример: #FFFAFA)', max_length=10, default='#EAEAEA')
+    text_color = models.CharField(verbose_name='Цвет на текста', max_length=10, default='#333333')
+    title_color = models.CharField(verbose_name='Цвет заголовков', max_length=10, default='#666')
 
     def __str__(self):
         return self.name
